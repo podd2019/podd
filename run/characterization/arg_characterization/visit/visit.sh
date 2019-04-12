@@ -1,0 +1,1 @@
+su - cc -s/bin/bash -c "cd /home/cc/Project/DistPwrCtrl/benchmark/visit/visit2.10.0/characterization/lulesh; ../../src/bin/visit -movie -format mpeg -geometry 4000x4000 -scriptfile ./movie.py -output mymovie"
