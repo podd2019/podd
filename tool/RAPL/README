@@ -1,0 +1,16 @@
+Run example:
+
+Note:
+
+For all source code, please check your numa mapping to make sure the program is operating on the right MSRs. 
+
+RaplSetPower: 
+#RaplSetPower is able to set power limit seprately for each socket/chip
+./RaplSetPower 100 100 #setting both chip to 100W limit
+./RaplSetPower 100 0 #set chip 0 to 100W and keep chip 1 power unchanged
+
+RaplPowerMonitor:
+./RaplPowerMonitor_1s # Monitor the on-chip power of both sockets of the interval 1s and write(append) the power data into txt file.
+
+RaplPowerMonitor_1s_serverID:
+./RaplPowerMonitor_1s_serverID # Monitor the on-chip power of both sockets of the interval 1s and write(append) the power data into txt file, which is identified by the serverID. 
