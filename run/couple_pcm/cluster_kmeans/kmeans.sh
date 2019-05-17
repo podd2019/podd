@@ -45,7 +45,8 @@ done
 wait $PID
 
 for host in "${hostArray[@]}"
-do  ssh $host "sudo pkill pcm.x" &
+do
+  ssh $host "sudo pkill pcm.x" &
 done
 
 end_time=`date +%s`

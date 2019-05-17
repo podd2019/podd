@@ -31,7 +31,7 @@ TEST=float(sys.argv[5])
 
 # load pre-trained classifier
 standardizer = pickle.load(open("/home/cc/PowerShift/tool/standardizer.sav", 'rb'))
-pca = pickle.load(open("/home/cc/PowerShift/tool/standardizer.sav", 'rb'))
+pca = pickle.load(open("/home/cc/PowerShift/tool/pca.sav", 'rb'))
 c_classifier = pickle.load(open("/home/cc/PowerShift/tool/svm-rbf-m.sav", 'rb'))
 m_classifier = pickle.load(open("/home/cc/PowerShift/tool/svm-rbf-m.sav", 'rb'))
 
