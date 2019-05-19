@@ -32,7 +32,7 @@ TEST=float(sys.argv[5])
 # load pre-trained classifier
 standardizer = pickle.load(open("/home/cc/PowerShift/tool/standardizer.sav", 'rb'))
 pca = pickle.load(open("/home/cc/PowerShift/tool/pca.sav", 'rb'))
-c_classifier = pickle.load(open("/home/cc/PowerShift/tool/svm-rbf-m.sav", 'rb'))
+c_classifier = pickle.load(open("/home/cc/PowerShift/tool/svm-rbf-c.sav", 'rb'))
 m_classifier = pickle.load(open("/home/cc/PowerShift/tool/svm-rbf-m.sav", 'rb'))
 
 # powercap is the total power cap for both of the sockets
@@ -117,7 +117,7 @@ def getPCM(app):
     numNode = 24
     pcmList = []
     for pcmFileOfEachNode in os.listdir(dirPath):
-        data = np.loadtxt(pcmFileOfEachNode,skiprows=2,delimiter=";",usecols=[2,3,4,5,10,11,12,13,18,20,21])
+        data = np.loadtxt(dirPath+pcmFileOfEachNode,skiprows=2,delimiter=";",usecols=[2,3,4,5,10,11,12,13,18,20,21])
         pcmList.append(data.mean(0))
     pcmData = np.mean(pcmList,axis = 0).tolist()
     #adding QPItoMC to the end
@@ -131,17 +131,18 @@ def learn(app, isMC):
     if LEARN_OLD_FLAG[app]:
         pcmData = pcmDataOld[app]
     else:
-        pcmData = getPCM()
+        pcmData = getPCM(app)
     # get pcm data
     #standardization
+    pcmData = [pcmData]
     pcmData = standardizer.transform(pcmData)
     #pca and feature selection
     pcmData = pca.transform(pcmData)
     # feed into classifier
     if isMC:
-        return m_classifier.predict(pcmData)
+        return m_classifier.predict(pcmData)[0]
     else:
-        return c_classifier.predict(pcmData)
+        return c_classifier.predict(pcmData)[0]
 
 #launch function for local power decider or power pool
 
@@ -170,7 +171,7 @@ os.system("/bin/bash /home/cc/PowerShift/script/startPowerMonitor.sh")
 
 # decide for multi socket and HT
 
-perf1, perf2 = getFeedback(DEFAULT_CONFIGURATION, DEFAULT_CONFIGURATION, 0)
+perf1, perf2 = getFeedback(DEFAULT_CONFIGURATION, DEFAULT_CONFIGURATION, 1)
 configurationDic1[DEFAULT_CONFIGURATION] = perf1
 configurationDic2[DEFAULT_CONFIGURATION] = perf2
 
@@ -214,7 +215,7 @@ curConfig2 = Configuration(POWERCAP, isMultiSocketAndHT2, isMultiSocketAndHT2, I
 logWrite(str(1/perf1) + ' ' + str(1/perf2) + ' ' +str(curConfig1[0])+ ' ' + str(curConfig2[0]))
 
 
-perf1, perf2 = getFeedback(curConfig1, curConfig2, 1)
+perf1, perf2 = getFeedback(curConfig1, curConfig2, 0)
 #check whether roll back
 if IsMC1 == 0 and perf1 < configurationDic1[lastConfig1]:
     #roll back for APP1

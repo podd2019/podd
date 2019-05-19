@@ -40,7 +40,7 @@ fi
 thread_number=$((12*($j1+1)*($k1+1)))
 
 
-ssh $headNode1 "$cmd1 $thread_number $core_dist $pwrcap1 $pwrcap2" &
+ssh $headNode1 "$cmd1 $thread_number $core_dist $pwrcap1 $pwrcap2 $m1" &
 PID1=$!
 
 #run back app
@@ -64,7 +64,7 @@ else
 fi
 thread_number=$((12*($j2+1)*($k2+1)))
 
-ssh $headNode2 "$cmd2 $thread_number $core_dist $pwrcap1 $pwrcap2" &
+ssh $headNode2 "$cmd2 $thread_number $core_dist $pwrcap1 $pwrcap2 $m2" &
 PID2=$!
 
 #runtime
